@@ -3,8 +3,26 @@
 #include<locale>
 #include <cmath>
 using namespace std;
+const int p = 4;
 
 int max(int m, int n) { return (m > n) ? m : n; }
+
+
+// Простое поле Галуа
+int* galois_field(int A[], int n, int p)
+{
+    for (int i = 0; i < n; i++)
+    {
+        if (A[i] >= p) {
+            A[i] = A[i] % p - 1;
+        }
+        if (A[i] < 0) {
+            A[i] = p + A[i];
+        }
+    }
+
+    return A;
+}
 
 // Сложение двух полиномов
 int* add(int A[], int B[], int m, int n)
@@ -17,6 +35,8 @@ int* add(int A[], int B[], int m, int n)
 
     for (int i = 0; i < n; i++)
         sum[i] += B[i];
+
+    galois_field(sum, n, p);
 
     return sum;
 }
@@ -32,6 +52,8 @@ int* subtraction(int A[], int B[], int m, int n)
 
     for (int i = 0; i < n; i++)
         difference[i] -= B[i];
+
+    galois_field(difference, n, p);
 
     return difference;
 }
@@ -50,6 +72,8 @@ int* multiply(int A[], int B[], int m, int n)
             prod[i + j] += A[i] * B[j];
     }
 
+    galois_field(prod, n, p);
+
     return prod;
 }
 
@@ -66,6 +90,8 @@ int* multiply_const(int A[], int n, int p)
         prod[i] += A[i] * p;
     }
 
+    galois_field(prod, n, p);
+
     return prod;
 }
 
@@ -73,6 +99,8 @@ int* multiply_const(int A[], int n, int p)
 int calculation_poly(int A[], int n, int x)
 {
     int prod = 0;
+
+    galois_field(A, n, p);
 
     for (int i = 0; i < n; i++)
     {
@@ -82,7 +110,7 @@ int calculation_poly(int A[], int n, int x)
     return prod;
 }
 
-// Вовод полинома в консоли
+// Вывод полинома в консоли
 void printPoly(int poly[], int n)
 {
     for (int i = 0; i < n; i++)
@@ -98,6 +126,7 @@ void printPoly(int poly[], int n)
 int main()
 {
     setlocale(LC_ALL, "Russian");
+
     // 5 + 10x^2 + 6x^3
     int A[] = { 5, 0, 10, 6 };
 
@@ -105,6 +134,9 @@ int main()
     int B[] = { 1, 2, 4 };
     int m = sizeof(A) / sizeof(A[0]);
     int n = sizeof(B) / sizeof(B[0]);
+
+    galois_field(A, m, p);
+    galois_field(B, n, p);
 
     cout << "\tЗачётная работа (Иванов Р., ИТ-41)\nЗадание: разработать библиотеку для работы с полиномами\n";
 
@@ -129,15 +161,14 @@ int main()
     cout << "\nПроизведение 2-ух полиномов равно\n\t";
     printPoly(prod, m + n - 1);
 
-    const int p = 10;
     int* prod1 = multiply_const(A, m, p);
 
-    cout << "\nПроизведение 1-ого полинома на p=10 равно\n\t";
+    cout << "\nПроизведение 1-ого полинома на p=" << p <<" равно\n\t";
     printPoly(prod1, m);
 
     int* prod2 = multiply_const(B, n, p);
 
-    cout << "\nПроизведение 2-ого полинома на p=10 равно\n\t";
+    cout << "\nПроизведение 2-ого полинома на p=" << p << " равно\n\t";
     printPoly(prod2, n);
 
     int x;
