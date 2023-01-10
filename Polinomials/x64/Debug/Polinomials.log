@@ -1,0 +1,3 @@
+﻿  Solutions.cpp
+C:\Users\ivano\Desktop\Libs\Polinomials\Solutions.cpp(122,22): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+  Polinomials.vcxproj -> C:\Users\ivano\Desktop\Libs\x64\Debug\Polinomials.lib
